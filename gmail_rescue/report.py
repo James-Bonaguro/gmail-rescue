@@ -203,12 +203,21 @@ def build(accounts: dict, reports_dir: str = "reports") -> str:
                 add(f"  - Mail delivered to `{addr}`: {info['count']:,} "
                     f"(newest: {info.get('newest') or '—'})")
 
-    add("\n> **`clearbriefco@gmail.com` still exists.** It has a rule forwarding "
-        "mail into the personal account. That rule lives on *that* account, so "
-        "nothing here could see or change it — the delivered-to counts above are "
-        "the only evidence of it. It has been dormant since late July. If you "
-        "want it off, you have to sign into clearbriefco@gmail.com and turn it "
-        "off there.\n")
+    add("\n> **`clearbriefco@gmail.com` — marked for deletion.** It forwards mail "
+        "into the personal account. That rule lives on *that* account, so nothing "
+        "here could see or change it; the delivered-to counts above are the only "
+        "evidence of it. It has been dormant since late July.\n>\n"
+        "> To remove it you have to sign into `clearbriefco@gmail.com` yourself — "
+        "no other account can do it. Two options, and the difference matters:\n>\n"
+        "> - **Delete just Gmail** (myaccount.google.com → Data & privacy → Delete "
+        "a Google service → Gmail). Removes the mailbox and the address, keeps the "
+        "Google account alive for anything else attached to it.\n"
+        "> - **Delete the whole account** (Data & privacy → Delete your Google "
+        "Account). Takes Drive, Photos, purchases and any logins that use it.\n>\n"
+        "> Both are permanent, and Google never re-issues a deleted Gmail address. "
+        "Before you pull the trigger, search that mailbox for anything still "
+        "arriving — once it is gone, mail sent there bounces rather than "
+        "forwarding.\n")
 
     # ------------------------------------------------------------- workflow
     add("\n## Your weekly workflow now\n")

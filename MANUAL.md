@@ -187,9 +187,25 @@ matching filter and it never does again.
 
 ---
 
-## One loose end
+## One loose end — clearbriefco@gmail.com
 
-`clearbriefco@gmail.com` forwards mail into your personal account. That rule
-lives on *that* account — it cannot be seen or changed from the other two. It has
-been dormant since late July. If you want it off, sign into that account and turn
-it off in its own Settings → Forwarding.
+That account forwards mail into your personal one. The rule lives on *that*
+account, so it cannot be seen or changed from either of the other two. It has
+been dormant since late July.
+
+You have decided to delete it. That has to be done from inside that account —
+sign into `clearbriefco@gmail.com` and go to **myaccount.google.com** → **Data
+& privacy**, then pick one:
+
+- **Delete a Google service → Gmail.** Removes the mailbox and the address,
+  leaves the underlying Google account intact for anything else attached to it.
+- **Delete your Google Account.** Takes everything with it — Drive, Photos,
+  purchases, and any third-party logins that use that address to sign in.
+
+Both are permanent, and Google never re-issues a deleted Gmail address. Before
+you do it, search that mailbox for anything still arriving: once it is gone,
+mail sent there bounces instead of forwarding to you.
+
+If all you actually want is the forwarding stopped, you do not have to delete
+anything — Settings → **Forwarding and POP/IMAP** → disable forwarding does it,
+and keeps the address parked in case something still depends on it.
