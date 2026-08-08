@@ -1,0 +1,22 @@
+# ---------------------------------------------------------------------------
+# SECRETS — never commit. This file lands in the first commit, before any
+# credential file can exist, so there is no window in which one is stageable.
+# ---------------------------------------------------------------------------
+credentials.json
+client_secret*.json
+tokens/
+*.token.json
+
+# Generated report data (may contain message IDs, subjects, sender addresses)
+reports/*.jsonl
+reports/*.md
+!reports/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+.coverage
