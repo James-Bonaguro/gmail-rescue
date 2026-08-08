@@ -1,0 +1,105 @@
+{
+  "_comment": [
+    "Seed classification lists. 'seed' entries come from the brief and from",
+    "senders observed live on the business account. Anything the tool derives",
+    "from 90-day data is written into config/filters.<account>.json tagged",
+    "with source='derived', so you can always tell what you specified from",
+    "what the data suggested.",
+    "",
+    "Matching is on the sending domain, including subdomain. Gmail's from:",
+    "operator matches the domain and its subdomains, so listing 'substack.com'",
+    "also catches 'mail.substack.com'."
+  ],
+
+  "personal": {
+    "newsletters": [
+      "tldrnewsletter.com",
+      "deeperlearning.producthunt.com",
+      "producthunt.com",
+      "morningbrew.com",
+      "mail.beehiiv.com",
+      "beehiiv.com",
+      "substack.com",
+      "forwardfuture.ai"
+    ],
+    "promotional": [
+      "emails.whop.com",
+      "popmenu.com",
+      "uber.com",
+      "e.lifetime.life",
+      "postable.com",
+      "wolfandshepherd.com",
+      "sevenrooms.com",
+      "livenation.com"
+    ],
+    "banks": [
+      "chase.com",
+      "americanexpress.com",
+      "discover.com",
+      "robinhood.com",
+      "creditkarma.com",
+      "e.tdbank.com"
+    ]
+  },
+
+  "business": {
+    "receipts": [
+      "stripe.com",
+      "squareup.com",
+      "intuit.com",
+      "quickbooks.intuit.com",
+      "paypal.com",
+      "bill.com",
+      "ramp.com",
+      "brex.com",
+      "expensify.com",
+      "invoice.zoho.com"
+    ],
+    "platform": [
+      "google.com",
+      "workspace.google.com",
+      "accounts.google.com",
+      "github.com",
+      "vercel.com",
+      "cloudflare.com",
+      "namecheap.com",
+      "godaddy.com",
+      "notion.so",
+      "slack.com",
+      "linear.app",
+      "figma.com",
+      "atlassian.com",
+      "openai.com",
+      "anthropic.com"
+    ],
+    "newsletters": [
+      "deeperlearning.producthunt.com",
+      "producthunt.com",
+      "m.learn.coursera.org",
+      "tldrnewsletter.com",
+      "substack.com",
+      "mail.beehiiv.com"
+    ]
+  },
+
+  "split_by_edition": [
+    "tldrnewsletter.com",
+    "producthunt.com",
+    "deeperlearning.producthunt.com"
+  ],
+
+  "_never_auto_classify_comment": "Domains that must never be bucketed automatically, because mail from them is usually a person even though the domain looks generic.",
+
+  "never_auto_classify": [
+    "gmail.com",
+    "googlemail.com",
+    "icloud.com",
+    "me.com",
+    "outlook.com",
+    "hotmail.com",
+    "yahoo.com",
+    "proton.me",
+    "protonmail.com",
+    "intersectionstrategies.co"
+  ]
+}

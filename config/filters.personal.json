@@ -1,0 +1,62 @@
+{
+  "account": "personal",
+  "generated_at": "2026-08-08T06:56:08.458053+00:00",
+  "note": "Gmail filters apply to incoming mail only. The existing backlog is handled by the cleanup phase, not by these.",
+  "filters": [
+    {
+      "key": "personal.newsletters.seed.1",
+      "description": "Newsletters (tldrnewsletter.com, deeperlearning.producthunt.com, producthunt.com...) \u2192 label Newsletters and skip the inbox",
+      "criteria": {
+        "from": "tldrnewsletter.com OR deeperlearning.producthunt.com OR producthunt.com OR morningbrew.com OR mail.beehiiv.com OR beehiiv.com OR substack.com OR forwardfuture.ai"
+      },
+      "action": {
+        "addLabelNames": [
+          "Newsletters"
+        ],
+        "removeLabelIds": [
+          "INBOX"
+        ]
+      },
+      "source": "seed"
+    },
+    {
+      "key": "personal.promotional.1",
+      "description": "Retail and promotional senders (emails.whop.com, popmenu.com, uber.com...) \u2192 skip the inbox",
+      "criteria": {
+        "from": "emails.whop.com OR popmenu.com OR uber.com OR e.lifetime.life OR postable.com OR wolfandshepherd.com OR sevenrooms.com OR livenation.com"
+      },
+      "action": {
+        "removeLabelIds": [
+          "INBOX"
+        ]
+      },
+      "source": "seed"
+    },
+    {
+      "key": "personal.banks.1",
+      "description": "Card and bank alerts (chase.com, americanexpress.com, discover.com...) \u2192 label Finances, stay in the inbox",
+      "criteria": {
+        "from": "chase.com OR americanexpress.com OR discover.com OR robinhood.com OR creditkarma.com OR e.tdbank.com"
+      },
+      "action": {
+        "addLabelNames": [
+          "Finances"
+        ]
+      },
+      "source": "seed"
+    },
+    {
+      "key": "personal.is_address",
+      "description": "Anything addressed to james@intersectionstrategies.co that lands here \u2192 label IS, stay in the inbox",
+      "criteria": {
+        "to": "james@intersectionstrategies.co"
+      },
+      "action": {
+        "addLabelNames": [
+          "IS"
+        ]
+      },
+      "source": "seed"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "account": "business",
+  "generated_at": "2026-08-08T06:56:08.458350+00:00",
+  "note": "Gmail filters apply to incoming mail only. The existing backlog is handled by the cleanup phase, not by these.",
+  "filters": [
+    {
+      "key": "business.receipts.1",
+      "description": "Payment and receipt senders (stripe.com, squareup.com, intuit.com...) \u2192 label IS/Receipts 2026, stay in the inbox",
+      "criteria": {
+        "from": "stripe.com OR squareup.com OR intuit.com OR quickbooks.intuit.com OR paypal.com OR bill.com OR ramp.com OR brex.com OR expensify.com OR invoice.zoho.com"
+      },
+      "action": {
+        "addLabelNames": [
+          "IS/Receipts 2026"
+        ]
+      },
+      "source": "seed"
+    },
+    {
+      "key": "business.platform.1",
+      "description": "Platform notifications (google.com, workspace.google.com, accounts.google.com...) \u2192 label Admin and skip the inbox",
+      "criteria": {
+        "from": "google.com OR workspace.google.com OR accounts.google.com OR github.com OR vercel.com OR cloudflare.com OR namecheap.com OR godaddy.com OR notion.so OR slack.com OR linear.app OR figma.com OR atlassian.com OR openai.com OR anthropic.com"
+      },
+      "action": {
+        "addLabelNames": [
+          "Admin"
+        ],
+        "removeLabelIds": [
+          "INBOX"
+        ]
+      },
+      "source": "seed"
+    },
+    {
+      "key": "business.newsletters.seed.1",
+      "description": "Newsletters (deeperlearning.producthunt.com, producthunt.com, m.learn.coursera.org...) \u2192 label Newsletters and skip the inbox",
+      "criteria": {
+        "from": "deeperlearning.producthunt.com OR producthunt.com OR m.learn.coursera.org OR tldrnewsletter.com OR substack.com OR mail.beehiiv.com"
+      },
+      "action": {
+        "addLabelNames": [
+          "Newsletters"
+        ],
+        "removeLabelIds": [
+          "INBOX"
+        ]
+      },
+      "source": "seed"
+    }
+  ]
+}
