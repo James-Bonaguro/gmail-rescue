@@ -1,170 +1,209 @@
 # gmail-rescue
 
-Cleans up two Gmail accounts — `james.bonaguro@gmail.com` (personal) and
-`james@intersectionstrategies.co` (business) — and keeps them clean with filters.
+Cleaning up and keeping clean two Gmail accounts:
 
-**It never deletes mail.** "Archive" means removing the `INBOX` label and
-nothing else; every message stays in All Mail and stays searchable. Starred mail,
-SENT, DRAFT, SPAM and TRASH are excluded from every operation. The OAuth scope it
-requests (`gmail.modify`) does not include permanent deletion, so this is
-enforced by Google, not just by the code.
+- **Personal** — `james.bonaguro@gmail.com`
+- **Business** — `james@intersectionstrategies.co`
 
----
+## Start here → [MANUAL.md](MANUAL.md)
 
-## Two ways to do this. Pick one.
+That's the route: click-by-click in your browser, nothing to install, about
+45 minutes. It covers tearing out the Superhuman labels and filters, emptying the
+backlog, building the labels, and installing the filters that stop it coming
+back.
 
-**If you want it fixed today with no setup**, read **[MANUAL.md](MANUAL.md)**.
-Click-by-click instructions for doing the whole thing in your browser: the exact
-searches to paste, what to click for each, every filter to create. About 45
-minutes, nothing to install.
+Everything below is what you need *after* that, when new mail starts showing up
+that none of the existing filters know about.
 
-**If you want the sender analysis and the ranked unsubscribe list**, do
-**[SETUP.md](SETUP.md)** first (~10 minutes, once) and then run the commands
-below. This is the version that tells you which 25 senders are actually burying
-you, with their unsubscribe links extracted and TLDR/Product Hunt broken out per
-edition.
-
-Both paths end in the same place. The scripted one shows its work.
+**Nothing in this repo deletes mail.** Archiving removes a message from the inbox;
+it stays in All Mail and stays searchable forever.
 
 ---
 
-## Why a script and not the Claude connector
+# Handling new senders
 
-The Gmail connector in Claude attaches **one account at a time**, can only label
-one conversation per call, and cannot create a Gmail filter at all. This tool
-holds a separate token per account, modifies 1,000 messages per call, and creates
-filters through the settings API. That is the entire reason it exists.
+You will keep subscribing to things. New tools will start emailing you. This is
+the whole maintenance workflow, and it takes about a minute per sender.
 
-It has to run on **your** machine: Google requires you to click "Allow" in a
-browser, and returns that approval to an address that only exists on the computer
-the browser is running on. Google retired the copy-paste flow in January 2023, so
-there is no way to do this from a remote container.
+## The one question
+
+When something new starts showing up in your inbox more than once, ask:
+
+> **Is there a person behind this email?**
+
+- **Yes** — a reply, a comment, an invite, someone mentioning you. **Leave it
+  alone.** It belongs in the inbox. At most, give it a label so you can find it
+  later — but never Skip the Inbox.
+- **No** — a newsletter, a receipt, a deploy notice, a sale. It gets a filter.
+
+Everything below is just working out which filter.
+
+## What to do, by type
+
+| What arrived | Action | Skip the Inbox? |
+|---|---|---|
+| Reply from a client, friend, anyone real | nothing at all | no |
+| A new client — their whole domain | label `Clients` | **no** |
+| Newsletter you actually want to read | label `Newsletters` | yes |
+| Newsletter you don't want | **unsubscribe instead** — don't filter it | — |
+| Store / retail marketing | no label needed, + Mark as read | yes |
+| Receipt, invoice, payment confirmation | label `IS/Receipts 2026` (business) or `Finances` (personal) | **no** |
+| Bank or credit card alert | label `Finances` | **no** |
+| SaaS billing, renewal, deploy, usage alert | label `Admin` | yes |
+| SaaS "someone commented / mentioned / assigned you" | label `Admin` | **no** — a person triggered it |
+| Security alert, password reset, 2FA code | **leave it completely alone** | never filter these |
+
+That last row matters. Never build a filter that touches security mail. If a rule
+ever hides a login alert you needed to see, that is a bad day.
+
+## Adding one — the fast way
+
+1. Open one of the offending emails.
+2. Click the **⋮** (three dots) at the top right **of the message**, not the page.
+3. Choose **Filter messages like these**. Gmail pre-fills the sender for you.
+4. Click **Create filter**, tick the actions from the table above, **Create
+   filter**.
+
+If it's something you already have a rule for — another newsletter, another
+store — do this instead, so you don't end up with ninety filters:
+
+## Adding to an existing filter (do this most of the time)
+
+1. Gear → **See all settings** → **Filters and Blocked Addresses**.
+2. Find the relevant filter (the newsletter one, the promo one) → **edit**.
+3. In the **From** field, go to the end and type ` OR newdomain.com`.
+4. **Continue** → **re-tick the boxes** — Gmail clears them on edit, which is the
+   easy mistake here — → **Update filter**.
+5. Tick **"Also apply filter to N matching conversations"** if you want it to
+   clear what's already sitting there.
+
+Four filters that each know about fifteen domains beats sixty filters. Gmail's
+limit is 1,000, but yours is patience.
+
+## Picking the right domain
+
+Look at the actual sender address — click the arrow next to the sender name to
+see it in full.
+
+- **Pure newsletter companies** — use the bare domain. `substack.com` catches
+  `mail.substack.com` and every publication under it, because Gmail's `from:`
+  matches subdomains too.
+- **Companies that send you both marketing and real mail** — use the *marketing
+  subdomain only*. `e.lifetime.life`, `emails.whop.com`,
+  `deeperlearning.producthunt.com`. Filtering the bare `lifetime.life` would
+  catch your membership and billing mail along with the promos.
+
+## The trap worth remembering
+
+**Before you tick Skip the Inbox, ask: does this domain ever send me something
+I'd be annoyed to miss?**
+
+Four senders were caught by that question when these filters were built, and all
+four are deliberately absent from every skip-inbox rule:
+
+| Domain | Also sends |
+|---|---|
+| `google.com` | Calendar invitations, Docs comments, Drive shares |
+| `uber.com` | ride receipts |
+| `sevenrooms.com` | restaurant reservation confirmations |
+| `livenation.com` | event tickets |
+
+A domain that mixes marketing with things you need gets **labelled, not
+archived** — or left alone entirely and handled by Gmail's own Promotions
+category, which the backlog sweep already clears.
+
+## Filter, or unsubscribe?
+
+- **Unsubscribe** when you don't want it at all. One less rule to maintain, and
+  it stops at the source.
+- **Filter** when you want to keep receiving it but not be interrupted — the
+  newsletters you genuinely skim, receipts, account notices.
+
+Don't filter something you could just unsubscribe from.
 
 ---
 
-## Runbook
+# When something goes wrong
 
-After [SETUP.md](SETUP.md), run these in order. Do the personal account first.
+**"I think a filter ate something."** Search `in:anywhere from:whoever` — nothing
+was deleted, so it is definitely still there. `in:anywhere` includes Spam and
+Trash too.
+
+**"This filter is too aggressive."** Settings → Filters and Blocked Addresses →
+**edit** or **delete** it. Deleting a filter doesn't un-archive the mail it
+already acted on; to bring that back, search for it, select all, and click **Move
+to Inbox**.
+
+**"My inbox is filling up again."** Something new is getting through. Sort by what
+you're seeing most of, and add it to the matching filter — that's the loop, and
+it should be a minute or two a month.
+
+**Once a quarter**, glance at Settings → Filters and delete any rule for a service
+you no longer use.
+
+---
+
+# The weekly habit
+
+Clear the inbox — after the filters it's people, plus `Finances`, plus `IS`.
+Open `Newsletters`, skim, select-all-archive the rest without guilt. Glance at
+`01_VIP`. About fifteen minutes.
+
+Business is the same loop with `Clients`, `Leads` and `Admin`, plus
+`IS/Receipts 2026` at month end when you reconcile.
+
+---
+
+# The scripts (optional, ignorable)
+
+There's a Python CLI in `gmail_rescue/` that does all of the above automatically
+across both accounts, plus a ranked list of your worst senders with unsubscribe
+links extracted. It needs a one-time Google Cloud registration
+([SETUP.md](SETUP.md), ~10 minutes) and has to run on your own machine, because
+Google requires you to click Allow in your own browser.
+
+You decided against it and that's a reasonable call — its main advantage was the
+sender analysis. It's here if you ever change your mind:
 
 ```bash
-# 1. See what is actually there. Read-only — changes nothing.
-.venv/bin/python -m gmail_rescue diagnose --account personal
-
-# 2. Count exactly what the cleanup would touch. Still changes nothing.
-.venv/bin/python -m gmail_rescue preflight --account personal
-
-# 3. Do it.
-.venv/bin/python -m gmail_rescue cleanup --account personal
-
-# 4. Install the filters that keep it clean.
-.venv/bin/python -m gmail_rescue filters --account personal
-
-# 5. Same four for business.
-.venv/bin/python -m gmail_rescue diagnose  --account business
-.venv/bin/python -m gmail_rescue preflight --account business
-.venv/bin/python -m gmail_rescue cleanup   --account business
-.venv/bin/python -m gmail_rescue filters   --account business
-
-# 6. Write the handoff report covering both.
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/python -m gmail_rescue auth      --account personal
+.venv/bin/python -m gmail_rescue diagnose  --account personal   # read-only
+.venv/bin/python -m gmail_rescue preflight --account personal   # counts, no writes
+.venv/bin/python -m gmail_rescue cleanup   --account personal
+.venv/bin/python -m gmail_rescue filters   --account personal
 .venv/bin/python -m gmail_rescue report
 ```
 
-**Read the `preflight` output before running `cleanup`.** It prints the exact
-count for every operation. That is the go/no-go.
+`config/domains.json` holds the same sender lists that `MANUAL.md` uses — a test
+enforces that the two stay identical, so the doc can't drift from the code.
 
-Add `--dry-run` to `cleanup` or `filters` to go through the motions and log
-everything without writing to Gmail. `run-all` chains steps 1–4 if you trust it.
+## Safety
 
-### Expect step 3 to take a while
+Enforced in code and covered by tests, not left to good intentions:
 
-The personal account has ~26,000 inbox messages. Applying the human-mail guards
-means fetching one metadata record per candidate message, batched 50 at a time —
-roughly 520 requests, **10 to 20 minutes**. It prints progress. If you interrupt
-it, everything already done is in `reports/oplog.personal.jsonl` and re-running
-picks up from the current state.
-
----
-
-## What each phase does
-
-| Phase | Command | Effect |
-|---|---|---|
-| 1 | `diagnose` | Profile, forwarding settings, filters, all labels with counts, unread by category, top 30 senders over 90 days, List-Unsubscribe counts. Writes `reports/diagnosis.<account>.md`. **Read-only.** |
-| 2 | `cleanup --account personal` | Removes Superhuman filters then labels; archives promotions/updates >2d and all social; sweeps stale unread and read backlog >30d behind guards; clears phantom unread; labels bank mail `Finances`. |
-| 3 | `cleanup --account business` | Creates `Clients`, `Leads`, `Admin`, `Newsletters`, `IS/Receipts 2026`; same archive passes; buckets receipts and platform mail from that account's own sender data. |
-| 4 | `filters` | Creates the Gmail filters. Idempotent — running twice does not duplicate. |
-| 5 | `report` | Writes `reports/after.md`: before/after numbers, labels and filters changed, top 25 unsubscribe candidates with links, weekly workflow. |
-
----
-
-## The safety rules, and where they live
-
-Every one of these is enforced in code and covered by a test:
-
-- **Nothing is deleted.** No delete, trash or batchDelete call exists anywhere in
-  the package — `tests/test_safety.py` parses the AST of every source file to
-  prove it, and proves the detector works by running it against a known-bad file.
-- **Starred, SENT, DRAFT, SPAM and TRASH are untouchable.** Every mutating query
-  goes through `harden_query()` in `api.py`, which appends the exclusions.
-  Removing `STARRED`/`SENT`/`DRAFT` raises `SafetyViolation`.
-- **Only `[Superhuman]` labels can be deleted.** Any other name raises.
-- **`batchModify` chunks at 1,000 ids**, tested at 999/1,000/1,001/2,500.
-- **Operations over 5,000 messages** print their count, proceed, and are flagged
-  in the final report.
-- **Every write is logged** to `reports/oplog.<account>.jsonl` with the query, the
-  count and every message id, which makes it reversible:
-  ```bash
-  .venv/bin/python -m gmail_rescue undo --account personal --op <op_id>
-  ```
-
-### The two human-mail guards
-
-The stale-unread and read-backlog sweeps are broad enough to catch real
-correspondence, so they run behind two guards derived from your own data — you
-are never asked to classify a sender:
-
-- **Correspondents** — every address you have written to in the last 12 months,
-  read out of your SENT mail. If you have emailed them, their mail is not machine
-  mail and it stays in the inbox.
-- **VIP** — anything labelled `01_VIP` on the personal account.
-
-### The Superhuman gate
-
-Gmail filters survive an OAuth revocation. Before any labelling work, the tool
-checks whether a `[Superhuman]` label has been applied to recent mail; if one
-has, a leftover filter is still live and it stops rather than fighting it.
-Removing those filters is the fix, and `cleanup` does it first, before anything
-else.
-
----
-
-## Configuration
-
-`config/domains.json` holds the sender lists. Edit it and re-run `filters` to
-change behaviour — for example moving `uber.com` out of `promotional` so ride
-receipts stay in the inbox.
-
-`config/filters.<account>.json` is the generated filter set, written on every
-`filters` run and committed to git so it is versioned and re-runnable. Entries
-tagged `"source": "derived"` were inferred from your own 90-day data: 5+ messages,
-`List-Unsubscribe` on 80%+ of them, and never emailed by you. Each carries its
-reasoning.
-
----
-
-## Development
+- **No delete, trash or batchDelete call exists anywhere in the package.** A test
+  parses the syntax tree of every source file to prove it, and a second test
+  proves that checker actually catches a known-bad file rather than passing
+  because it found nothing.
+- Every bulk query gets `-is:starred -in:sent -in:drafts -in:chats -in:spam
+  -in:trash` welded on before it runs.
+- Only `[Superhuman]`-prefixed labels can be deleted; any other name raises.
+- No skip-inbox filter can match a transactional domain — enforced by test.
+- Every write is logged with its message ids, so `undo --op <id>` can reverse it.
+- The OAuth scope requested (`gmail.modify`) cannot permanently delete mail, so
+  Google blocks deletion independently of this code.
 
 ```bash
-.venv/bin/pip install -r requirements.txt pytest
-.venv/bin/python -m pytest tests/ -q
+.venv/bin/python -m pytest tests/ -q     # 133 passed, no credentials needed
 ```
 
-122 tests, no credentials required. `tests/fake_gmail.py` is an in-memory Gmail
-double with a working query evaluator, so the end-to-end tests run all five
-phases against a realistic mailbox and assert the safety invariants hold —
-starred mail untouched, VIP untouched, correspondents untouched, message count
-unchanged before and after.
+`tests/fake_gmail.py` is an in-memory Gmail with a working query evaluator, so
+all five phases run against a realistic mailbox offline. The live API is untested
+until it runs against a real account — which is what `preflight` is for.
 
-**The live Gmail API is untested.** It cannot be exercised without your
-credentials. The logic is verified against the double; the first real run is the
-first time it touches Google's servers. That is what `preflight` is for.
+## Loose end
+
+`clearbriefco@gmail.com` forwards into the personal account and is marked for
+deletion. That rule lives on that account and can't be reached from either of the
+other two — see the end of [MANUAL.md](MANUAL.md) for how to remove it.
