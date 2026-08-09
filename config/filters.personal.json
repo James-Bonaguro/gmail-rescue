@@ -1,13 +1,13 @@
 {
   "account": "personal",
-  "generated_at": "2026-08-08T06:56:08.458053+00:00",
+  "generated_at": "2026-08-09T01:54:03.442333+00:00",
   "note": "Gmail filters apply to incoming mail only. The existing backlog is handled by the cleanup phase, not by these.",
   "filters": [
     {
       "key": "personal.newsletters.seed.1",
       "description": "Newsletters (tldrnewsletter.com, deeperlearning.producthunt.com, producthunt.com...) \u2192 label Newsletters and skip the inbox",
       "criteria": {
-        "from": "tldrnewsletter.com OR deeperlearning.producthunt.com OR producthunt.com OR morningbrew.com OR mail.beehiiv.com OR beehiiv.com OR substack.com OR forwardfuture.ai"
+        "from": "tldrnewsletter.com OR deeperlearning.producthunt.com OR producthunt.com OR morningbrew.com OR beehiiv.com OR substack.com OR forwardfuture.ai"
       },
       "action": {
         "addLabelNames": [
@@ -21,13 +21,14 @@
     },
     {
       "key": "personal.promotional.1",
-      "description": "Retail and promotional senders (emails.whop.com, popmenu.com, uber.com...) \u2192 skip the inbox",
+      "description": "Retail and promotional senders (emails.whop.com, popmenu.com, e.lifetime.life...) \u2192 skip the inbox and mark as read",
       "criteria": {
-        "from": "emails.whop.com OR popmenu.com OR uber.com OR e.lifetime.life OR postable.com OR wolfandshepherd.com OR sevenrooms.com OR livenation.com"
+        "from": "emails.whop.com OR popmenu.com OR e.lifetime.life OR postable.com OR wolfandshepherd.com"
       },
       "action": {
         "removeLabelIds": [
-          "INBOX"
+          "INBOX",
+          "UNREAD"
         ]
       },
       "source": "seed"

@@ -177,7 +177,8 @@ def _derive_newsletters(account: str, config: dict) -> list[tuple[str, str]]:
 
     acct = config.get(account, {})
     excluded = set(config.get("never_auto_classify", []))
-    for key in ("banks", "promotional", "receipts", "platform", "newsletters"):
+    for key in ("banks", "promotional", "receipts", "platform", "collab",
+                "newsletters"):
         excluded |= set(acct.get(key, []))
 
     return derive_newsletter_domains(aggregate(metas), correspondents, excluded)

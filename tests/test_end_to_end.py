@@ -347,6 +347,90 @@ class TestFilters:
         b = filters.signature({"from": "A.com"}, {"addLabelIds": ["2", "1"]})
         assert a == b
 
+    def test_collaboration_tools_stay_in_inbox(self):
+        # GitHub, Slack, Notion et al. send mail because a person did
+        # something. Labelled, never archived.
+        config = cleanup.load_config("config/domains.json")
+        spec = filters.build_business(config, [])
+        f = next(f for f in spec["filters"] if f["key"].startswith("business.collab"))
+        assert "removeLabelIds" not in f["action"]
+        assert f["action"]["addLabelNames"] == ["Admin"]
+        assert "github.com" in f["criteria"]["from"]
+
+
+#  Domains that must never end up behind a skip-inbox rule. Each one carries
+#  mail the user would be sorry to lose:
+#    uber.com        ride receipts
+#    sevenrooms.com  restaurant reservation confirmations
+#    livenation.com  event tickets
+#    google.com      Calendar invitations, Docs/Drive share notices
+NEVER_SKIP_INBOX = ("uber.com", "sevenrooms.com", "livenation.com", "google.com")
+
+
+class TestTransactionalSendersAreNeverArchived:
+    """Regression guard. These were in the first draft and would have cost mail."""
+
+    @pytest.fixture(params=["personal", "business"])
+    def spec(self, request):
+        config = cleanup.load_config("config/domains.json")
+        builder = (filters.build_personal if request.param == "personal"
+                   else filters.build_business)
+        return builder(config, [])
+
+    def test_no_skip_inbox_filter_matches_a_transactional_domain(self, spec):
+        offenders = []
+        for f in spec["filters"]:
+            if "INBOX" not in f["action"].get("removeLabelIds", []):
+                continue
+            criteria = " ".join(str(v) for v in f["criteria"].values())
+            for domain in NEVER_SKIP_INBOX:
+                if domain in criteria:
+                    offenders.append(f"{f['key']} skips inbox for {domain}")
+        assert not offenders, "; ".join(offenders)
+
+    def test_they_are_absent_from_the_config_lists(self):
+        config = cleanup.load_config("config/domains.json")
+        for account in ("personal", "business"):
+            for key, domains in config[account].items():
+                if key.startswith("_") or not isinstance(domains, list):
+                    continue
+                assert not (set(domains) & set(NEVER_SKIP_INBOX)), \
+                    f"{account}.{key} still lists a transactional domain"
+
+
+class TestManualMatchesConfig:
+    """MANUAL.md is the path the user actually follows.
+
+    If the doc and the config drift apart, the hand-built filters stop matching
+    the tooling and nobody notices until mail goes missing.
+    """
+
+    @staticmethod
+    def or_lists_in_manual():
+        import pathlib
+        import re
+
+        text = pathlib.Path("MANUAL.md").read_text()
+        return [
+            frozenset(part.strip() for part in match.split(" OR "))
+            for match in re.findall(r"`([^`]+ OR [^`]+)`", text)
+        ]
+
+    @pytest.mark.parametrize("account,key", [
+        ("personal", "newsletters"), ("personal", "promotional"),
+        ("personal", "banks"), ("business", "receipts"),
+        ("business", "platform"), ("business", "collab"),
+        ("business", "newsletters"),
+    ])
+    def test_every_config_list_appears_verbatim_in_the_manual(self, account, key):
+        config = cleanup.load_config("config/domains.json")
+        expected = frozenset(config[account][key])
+        found = self.or_lists_in_manual()
+        assert expected in found, (
+            f"{account}.{key} does not match any filter line in MANUAL.md.\n"
+            f"config has: {sorted(expected)}"
+        )
+
 
 class TestReport:
     def test_renders_end_to_end(self, env, tmp_path):

@@ -263,7 +263,7 @@ def run_business(client, config: dict, *, reports_dir: str = "reports") -> dict:
         phase=phase, action="label_receipts", archive=False,
     )
     summary["admin"] = label_domains_in_inbox(
-        client, buckets["platform"], "Admin",
+        client, buckets["platform"] + buckets["collab"], "Admin",
         phase=phase, action="label_admin", archive=False,
     )
     summary["buckets"] = buckets
@@ -301,7 +301,7 @@ def classify_business_domains(config: dict, correspondents: set[str], *,
     cfg = config["business"]
     never = set(config.get("never_auto_classify", []))
 
-    buckets = {"receipts": [], "platform": [], "newsletters": []}
+    buckets = {"receipts": [], "platform": [], "collab": [], "newsletters": []}
     lines = ["# Business sender classification\n",
              "Only domains matching a configured list are acted on. Everything "
              "else is left in the inbox untouched.\n",
@@ -309,7 +309,7 @@ def classify_business_domains(config: dict, correspondents: set[str], *,
              "|---|---:|---|---|"]
 
     for bucket, key in (("receipts", "receipts"), ("platform", "platform"),
-                        ("newsletters", "newsletters")):
+                        ("collab", "collab"), ("newsletters", "newsletters")):
         for domain in cfg.get(key, []):
             if domain in never:
                 continue
