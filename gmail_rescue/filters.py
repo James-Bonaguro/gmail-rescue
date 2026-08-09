@@ -70,9 +70,12 @@ def build_personal(config: dict, derived_newsletters: list[tuple[str, str]]) -> 
             "key": f"personal.promotional.{i}",
             "description": f"Retail and promotional senders "
                            f"({', '.join(chunk[:3])}"
-                           f"{'...' if len(chunk) > 3 else ''}) → skip the inbox",
+                           f"{'...' if len(chunk) > 3 else ''}) → skip the inbox "
+                           f"and mark as read",
+            #  Removing UNREAD is Gmail's "Mark as read" filter action. Without
+            #  it these quietly rebuild the unread pile the badge kill cleared.
             "criteria": {"from": _from_clause(chunk)},
-            "action": {"removeLabelIds": ["INBOX"]},
+            "action": {"removeLabelIds": ["INBOX", "UNREAD"]},
             "source": "seed",
         })
 
@@ -121,11 +124,25 @@ def build_business(config: dict, derived_newsletters: list[tuple[str, str]]) -> 
     for i, chunk in enumerate(_chunks(b["platform"]), 1):
         filters.append({
             "key": f"business.platform.{i}",
-            "description": f"Platform notifications ({', '.join(chunk[:3])}"
+            "description": f"Machine-only platform notices ({', '.join(chunk[:3])}"
                            f"{'...' if len(chunk) > 3 else ''}) "
                            f"→ label Admin and skip the inbox",
             "criteria": {"from": _from_clause(chunk)},
             "action": {"addLabelNames": ["Admin"], "removeLabelIds": ["INBOX"]},
+            "source": "seed",
+        })
+
+    #  Split from `platform` on purpose: these send mail because a person did
+    #  something, so they get labelled but never archived.
+    for i, chunk in enumerate(_chunks(b.get("collab", [])), 1):
+        filters.append({
+            "key": f"business.collab.{i}",
+            "description": f"Collaboration tools where a person triggered the "
+                           f"mail ({', '.join(chunk[:3])}"
+                           f"{'...' if len(chunk) > 3 else ''}) "
+                           f"→ label Admin, stay in the inbox",
+            "criteria": {"from": _from_clause(chunk)},
+            "action": {"addLabelNames": ["Admin"]},
             "source": "seed",
         })
 

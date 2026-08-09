@@ -128,53 +128,106 @@ called `IS`.
 
 ## Part 4 — The filters (this is the part that keeps it fixed)
 
-Filters only act on **new incoming mail**. They do nothing to the backlog, which
-is why Part 2 came first.
+Filters act on **new incoming mail**. They can also be applied to what is already
+there — see the checkbox below, which does a lot of Part 2's work for you.
 
-For each one: Gmail search box → click the **sliders icon** on the right of the
-box (Show search options) → fill in the **From** field → **Create filter** →
-tick the boxes listed → **Create filter**.
+### How to make one (the mechanics, once)
+
+1. Click the **sliders icon** at the right end of the Gmail search box
+   ("Show search options").
+2. Fill in the **From** field (or **To**, where the table says so). Paste the
+   whole line exactly, `OR`s and all — Gmail understands it.
+3. Click **Create filter** (bottom right of that panel).
+4. On the next panel, tick the boxes the table lists.
+5. **Also tick "Also apply filter to N matching conversations."** This is the one
+   worth knowing about: it applies the filter to mail you already have, not just
+   future mail. On the newsletter and promo filters it archives the backlog for
+   you. On the label-only filters it back-labels everything historically.
+6. Click **Create filter**.
+
+If a label in the table does not exist yet, the "Apply the label" dropdown has a
+**New label** option at the bottom — you can make it right there.
+
+**Two boxes you should not tick, ever:** *Delete it* and *Forward it*.
 
 ### Personal account
 
-| # | From field (paste exactly) | Tick these boxes |
-|---|---|---|
-| 1 | `tldrnewsletter.com OR deeperlearning.producthunt.com OR producthunt.com OR morningbrew.com OR mail.beehiiv.com OR substack.com OR forwardfuture.ai` | Skip the Inbox **+** Apply label: `Newsletters` |
-| 2 | `emails.whop.com OR popmenu.com OR uber.com OR e.lifetime.life OR postable.com OR wolfandshepherd.com OR sevenrooms.com OR livenation.com` | Skip the Inbox |
-| 3 | `chase.com OR americanexpress.com OR discover.com OR robinhood.com OR creditkarma.com OR e.tdbank.com` | Apply label: `Finances` — **do not** tick Skip the Inbox |
-| 4 | leave From blank, put `james@intersectionstrategies.co` in the **To** field | Apply label: `IS` — **do not** tick Skip the Inbox |
+| # | Field | Paste exactly | Tick these |
+|---|---|---|---|
+| 1 | From | `tldrnewsletter.com OR producthunt.com OR deeperlearning.producthunt.com OR morningbrew.com OR beehiiv.com OR substack.com OR forwardfuture.ai` | Skip the Inbox **+** Apply label `Newsletters` |
+| 2 | From | `emails.whop.com OR popmenu.com OR e.lifetime.life OR postable.com OR wolfandshepherd.com` | Skip the Inbox **+** Mark as read |
+| 3 | From | `chase.com OR americanexpress.com OR discover.com OR robinhood.com OR creditkarma.com OR e.tdbank.com` | Apply label `Finances` — **nothing else** |
+| 4 | **To** | `james@intersectionstrategies.co` | Apply label `IS` — **nothing else** |
 
-On filter 2, note that `uber.com` also carries your ride receipts. If you want
-those in the inbox, take `uber.com` out of that list.
+Filter 2 gets **Mark as read** because those never need reading and you do not
+want them quietly rebuilding the unread pile you just cleared. Filter 1 does
+*not* get it — you want to see how much is waiting when you open `Newsletters`.
+
+Filters 3 and 4 deliberately have no Skip the Inbox. Bank alerts and anything to
+your business address stay in front of you; the label is just so you can find
+them later.
 
 ### Business account
 
-| # | From field (paste exactly) | Tick these boxes |
-|---|---|---|
-| 1 | `stripe.com OR squareup.com OR intuit.com OR paypal.com OR bill.com OR ramp.com OR brex.com OR expensify.com` | Apply label: `IS/Receipts 2026` — **do not** tick Skip the Inbox |
-| 2 | `google.com OR github.com OR vercel.com OR cloudflare.com OR namecheap.com OR godaddy.com OR notion.so OR slack.com OR linear.app OR figma.com` | Skip the Inbox **+** Apply label: `Admin` |
-| 3 | `deeperlearning.producthunt.com OR producthunt.com OR m.learn.coursera.org OR tldrnewsletter.com OR substack.com OR mail.beehiiv.com` | Skip the Inbox **+** Apply label: `Newsletters` |
+| # | Field | Paste exactly | Tick these |
+|---|---|---|---|
+| 1 | From | `stripe.com OR squareup.com OR intuit.com OR paypal.com OR bill.com OR ramp.com OR brex.com OR expensify.com` | Apply label `IS/Receipts 2026` — **nothing else** |
+| 2 | From | `vercel.com OR cloudflare.com OR namecheap.com OR godaddy.com` | Skip the Inbox **+** Apply label `Admin` |
+| 3 | From | `github.com OR slack.com OR notion.so OR figma.com OR linear.app OR atlassian.com` | Apply label `Admin` — **nothing else** |
+| 4 | From | `deeperlearning.producthunt.com OR producthunt.com OR m.learn.coursera.org OR tldrnewsletter.com OR substack.com OR beehiiv.com OR leftclick.ai` | Skip the Inbox **+** Apply label `Newsletters` |
 
-The rule behind all of these: **mail with a person behind it stays in the inbox
-untouched. Machine mail gets a label. Only newsletters and promos skip the
-inbox.** If you ever wonder whether to add a sender, ask which of those three it
-is.
+Filters 2 and 3 look like they should be one filter and are deliberately not.
+Vercel and your registrar only ever send you machine noise — deploy succeeded,
+domain renews in 30 days — so that can leave the inbox. GitHub, Slack, Notion,
+Figma and Linear send you mail **because a human did something**: commented on
+your PR, mentioned you, assigned you a task. Those get the `Admin` label so they
+are findable, but they stay in the inbox where you will see them.
 
 ---
 
-## Part 5 — Unsubscribing
+### What I took out, and why
 
-The scripted path produces a ranked list of your top 25 offenders with their
-unsubscribe links extracted. Doing it by hand, the equivalent is:
+These four were in the earlier draft. Each one would have cost you mail you
+actually want, so I removed them rather than leave you to find out.
 
-1. Search `in:inbox OR in:anywhere newer_than:90d` and sort by sender in your
-   head — or simpler, just work the `Newsletters` label for a week.
-2. Gmail shows an **Unsubscribe** link next to the sender name on most bulk mail.
-   Click it there; it is the same one-click mechanism.
-3. For TLDR and Product Hunt specifically: they send several different editions
-   from the same domain, each with its own unsubscribe link. Unsubscribing from
-   one does **not** stop the others. Open one edition you do not read, unsubscribe
-   from that one, and repeat per edition.
+- **`uber.com`** — sends your ride receipts down the same domain as its
+  marketing. Skipping the inbox would archive the receipts. Gmail's own
+  Promotions category already catches Uber marketing, and Part 2 sweeps that, so
+  you lose nothing by leaving it off.
+- **`sevenrooms.com`** — that is your restaurant **reservation confirmations**.
+- **`livenation.com`** — that is your **event tickets**.
+- **`google.com`** — this is the one that would have hurt. Google Calendar
+  invitations, Google Docs share notifications and Drive share notices all come
+  from `google.com`. A blanket skip-inbox rule on that domain means you stop
+  seeing meeting invites. Left out entirely.
+
+If you later want Workspace admin mail labelled, do it precisely: open one of
+those emails, click the arrow next to the sender to see its exact address (it
+will be something like `workspace-noreply@google.com`), and build a filter on
+that full address rather than on `google.com`.
+
+The rule behind all of it: **mail with a person behind it stays in the inbox
+untouched. Machine mail gets a label. Only newsletters and promos skip the
+inbox.** When you are unsure about a new sender, ask which of those three it is —
+and if a domain sends both kinds, do not skip the inbox on it.
+
+---
+
+## Part 5 — Unsubscribing, whenever you feel like it
+
+Do not make a project of this. Once the filters are in, nothing on this list is
+interrupting you any more — it is all landing quietly in `Newsletters`. Unsubscribe
+opportunistically instead:
+
+Open `Newsletters` once a week. Anything you scroll past without opening two
+weeks running, kill on the spot — Gmail puts an **Unsubscribe** link right next
+to the sender's name at the top of the message. One click, done.
+
+**The one thing worth knowing:** TLDR and Product Hunt send several different
+editions from the same address (TLDR AI, TLDR Web Dev, TLDR Founders, and so on).
+Unsubscribing from one does **not** stop the others — they are separate lists. So
+if you want to keep TLDR AI but drop the rest, you have to open one of each
+edition you don't read and unsubscribe from that one individually.
 
 ---
 

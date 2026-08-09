@@ -225,10 +225,18 @@ def build(accounts: dict, reports_dir: str = "reports") -> str:
 
     # ----------------------------------------------------------------- misc
     add("\n## Judgement calls worth reviewing\n")
-    add("- **`uber.com` is filtered as promotional and skips the inbox.** It was "
-        "on your noise list, but Uber also sends ride receipts down the same "
-        "domain. If you want those in the inbox, move `uber.com` out of "
-        "`promotional` in `config/domains.json` and re-run the filters command.\n")
+    add("- **Four senders from the original noise list are deliberately not "
+        "filtered.** `uber.com` (ride receipts), `sevenrooms.com` (reservation "
+        "confirmations) and `livenation.com` (event tickets) each mix marketing "
+        "with mail worth keeping, and `google.com` carries Calendar invitations "
+        "and Docs/Drive share notices. Skipping the inbox on any of them would "
+        "hide something you need. Gmail's own Promotions category still catches "
+        "their marketing. Add them to `config/domains.json` if you disagree.\n")
+    add("- **Collaboration tools are labelled but not archived.** GitHub, Slack, "
+        "Notion, Figma and Linear send mail because a person did something — "
+        "commented, mentioned you, assigned you a task — so they get `Admin` and "
+        "stay in the inbox. Only the machine-only platforms (Vercel, Cloudflare, "
+        "registrars) skip it.\n")
     add("- Filters marked *derived* were inferred from your own 90-day data: a "
         "domain qualified only if it sent 5+ messages, carried a "
         "`List-Unsubscribe` header on 80%+ of them, and you have never emailed "
