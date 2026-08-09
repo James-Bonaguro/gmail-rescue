@@ -231,6 +231,22 @@ edition you don't read and unsubscribe from that one individually.
 
 ---
 
+## Part 6 — Everything you subscribe to from now on
+
+You are done setting up. The ongoing job is one question per new sender —
+**is there a person behind this email?** — and about a minute of clicking.
+
+That workflow is in **[README.md](README.md#handling-new-senders)**: which action
+to pick for each kind of mail, how to add a domain to an existing filter instead
+of making a new one every time, how to pick the right domain when a company sends
+you both marketing and real mail, and what to do when a filter turns out to be
+too aggressive.
+
+Read it once now while the setup is fresh. It is the part that keeps this from
+silting up again.
+
+---
+
 ## The weekly habit
 
 Once a week: clear the inbox (it is now people plus `Finances` plus `IS`), skim
