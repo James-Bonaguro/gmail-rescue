@@ -13,6 +13,81 @@ Do the personal account first — it is the buried one.
 
 ---
 
+---
+
+# Mail from real people isn't reaching me
+
+Start here if that's why you opened this. Work the three causes in order — they
+are listed by how often they turn out to be the answer, and the first one isn't
+an archiving problem at all.
+
+## 1. It's in the inbox, in a tab you never look at
+
+This is usually it. Gmail sorts incoming mail into **Primary / Promotions /
+Updates / Social / Forums**, and on phones **only Primary raises a notification
+by default.** Mail from a real person that Gmail decides is an "Update" lands in
+a tab you don't check and never buzzes your phone. It looks exactly like it
+skipped the inbox. It didn't.
+
+Check it in ten seconds — search:
+
+```
+in:inbox category:updates newer_than:14d
+```
+
+If people are in that list, this is your problem.
+
+**Fix, on the web:** gear → **See all settings** → **Inbox** → Inbox type
+**Default** → untick every category except Primary → **Save Changes**. Now
+everything lands in one inbox with nothing hiding in a side tab.
+
+**Fix, on the phone:** Gmail app → ☰ → **Settings** → pick the account →
+**Notifications** → set to **All new mail**, not "High priority only". Then under
+**Inbox categories**, untick the extra tabs.
+
+Do both. The phone and the web are configured separately, which is why this
+often half-works and stays confusing.
+
+## 2. A filter with "Skip the Inbox" is too broad
+
+See what's actually being archived — search:
+
+```
+-in:inbox -in:sent -in:draft -in:chats newer_than:30d
+```
+
+Everything in that list left your inbox in the last month. If it's all
+newsletters and receipts, your filters are fine and your problem is cause 1. If
+real people are in there, one of your filters is too broad.
+
+To find which: gear → **See all settings** → **Filters and Blocked Addresses**.
+Read down the list for anything that says **Skip Inbox**, and check its From
+field for a domain that catches more than you meant — `gmail.com`, `google.com`,
+or a bare company domain that also carries real mail. Click **edit** to narrow
+it, or **delete** to kill it.
+
+**Nothing was deleted.** To pull the archived mail back: run the search above,
+select all, click **Move to Inbox**.
+
+## 3. Superhuman's filters are still running (personal account)
+
+**Revoking an app's access does not stop the Gmail filters it created.** They are
+part of your account, not the app, and they keep firing forever. One of the
+labels Superhuman made was literally called `AutoArchived`.
+
+So if the personal account still has mail vanishing, check:
+
+gear → **See all settings** → **Filters and Blocked Addresses** → look for any
+filter whose action mentions a label starting with `[Superhuman]`, and delete it.
+
+Then search `label:"[Superhuman]/AI/AutoArchived"` — anything in there was pulled
+out of your inbox by that system, and selecting all → **Move to Inbox** brings it
+back.
+
+Part 1 below covers removing the rest of it properly.
+
+---
+
 ## Before you start: the one Gmail trick that makes this possible
 
 When you run a search in Gmail and tick the checkbox at the top left, Gmail
